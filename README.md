@@ -1,3 +1,3 @@
-# Personal website
+# Personal Website
 
-Accessible at [amoryhoste.com](https://amoryhoste.com)
+Code for my [personal website](https://amoryhoste.com).
