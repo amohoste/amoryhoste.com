@@ -41,7 +41,7 @@
   <meta property="og:title" content="Amory Hoste - Software Engineer"/>
 </head>
 <body>
-  <div class="all-content w-clearfix">
+  <div class="all-content w-clearfix" id="all-content">
     <header class="head-content header">
       <div class="headline">
         <div class="headline-terminal">
@@ -59,7 +59,7 @@
         </div>
       </div>
     </header>
-    <div class="resume-content content">
+    <div class="resume-content content" id="content">
       <div class="main-content">
         <div class="resume-terminal">
           <h1 class="terminal-typed">&gt; less resume.pdf</h1>
@@ -247,7 +247,7 @@
       </div>
     </div>
     <div class="scroll-counter">
-      <div class="counter-text">[0/140]</div>
+      <div class="counter-text" id="curscroll">[0/140]</div>
     </div>
     <div class="tmux-bar">
       <div class="tmux-bar-left">
@@ -281,10 +281,77 @@
 
       document.querySelector('#curdate').textContent = dateStr;
     }
-    
+
+    // Live scroll position
+    // Live date and time
+    function updateScrollPosition() {
+      let scrollPosition = 0;
+      let curHeight = 0;
+      let maxHeight = 0;
+      var x = document.getElementById("myDIV");
+
+      // Depending on screensize, need to calculate screen size based on window or div
+      const screenSize = window.getComputedStyle(document.body, ':before').content.replace(/\"/g, '');
+      if (screenSize === "large" || screenSize == "xlarge") {
+        // Get scroll position for right div
+        const el = document.getElementById("content");
+        scrollPosition = el.scrollTop || 0;
+        maxHeight = Math.floor((el.scrollHeight - window.innerHeight) / 5);
+      } else {
+        // Get scroll position for window
+        scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        maxHeight = Math.floor((document.documentElement.scrollHeight - window.innerHeight) / 5);
+      }
+      curHeight = Math.min(maxHeight, Math.floor(scrollPosition / 5));
+      const scrollStr = '[' + curHeight + '/' + maxHeight + ']';
+
+      document.querySelector('#curscroll').textContent = scrollStr;
+    }
+
+    function addScrollEventListener() {
+      // Depending on screensize, need to calculate screen size based on window or div
+      const screenSize = window.getComputedStyle(document.body, ':before').content.replace(/\"/g, '');
+      const windowElement = document.getElementById('all-content');
+      const contentElement = document.getElementById('content');
+
+      if (screenSize === "large" || screenSize == "xlarge") {
+        // If event listener not already set
+        if (contentElement.getAttribute('listener') !== 'true') {
+          contentElement.setAttribute('listener', 'true');
+          // Add right div event listener
+          contentElement.addEventListener("scroll", updateScrollPosition);
+
+          // Remove window event listener
+          window.removeEventListener("load", updateScrollPosition);
+          windowElement.setAttribute('listener', 'false');
+        }
+      } else {
+        // If event listener not already set
+        if (windowElement.getAttribute('listener') !== 'true') {
+          windowElement.setAttribute('listener', 'true');
+          // Add window event listener if necessary
+          window.addEventListener('scroll', updateScrollPosition)
+
+          // Remove window event listener
+          contentElement.removeEventListener("load", updateScrollPosition);
+          contentElement.setAttribute('listener', 'false');
+        }
+      }
+    }
+
+    document.getElementById('content').setAttribute('listener', 'false');
+    document.getElementById('all-content').setAttribute('listener', 'false');
+
+    // Update scroll indicator on scroll
+    addScrollEventListener();
+    updateScrollPosition();
+    setInterval(addScrollEventListener, 1000);
+
     // Update date every second
-    updateDateTime()
+    updateDateTime();
     setInterval(updateDateTime, 1000);
+    
+    
   </script>
 </body>
 </html>

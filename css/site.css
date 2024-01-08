@@ -58,7 +58,16 @@ ul {
   padding-left: 40px;
 }
 
+body:before {
+	content: "large";
+	display: none;
+	visibility: hidden;
+}
+
 @media (min-width: 768px) {
+  body:before {
+		content: "large";
+	}
 }
 
 :root {
@@ -1329,6 +1338,10 @@ a {
 }
 
 @media screen and (min-width: 1440px) {
+  body:before {
+		content: "xlarge";
+	}
+
   .headline-text {
     text-decoration: none;
   }
@@ -1490,6 +1503,10 @@ a {
 }
 
 @media screen and (max-width: 991px) {
+  body:before {
+		content: "medium";
+	}
+
   .header-text {
     font-size: 36px;
   }
@@ -1563,6 +1580,10 @@ a {
 }
 
 @media screen and (max-width: 767px) {
+  body:before {
+		content: "small";
+	}
+
   .header-text {
     font-size: 32px;
   }
@@ -1763,6 +1784,10 @@ a {
 }
 
 @media screen and (max-width: 479px) {
+  body:before {
+		content: "xsmall";
+	}
+
   h1 {
     font-size: 40px;
   }
