@@ -83,7 +83,7 @@
                 <div class="date-item-header-text">Huawei R&amp;D UK</div>
               </div>
               <div class="date-item-location">Edinburgh, Scotland, United Kingdom</div>
-              <div class="date-item-date">May 2023 - Present · 9 mos</div>
+              <div class="date-item-date date-item-calc">May 2023 - Present · 3 mos</div>
             </div>
             <div class="date-item-separator-solid">
               <div class="separator-hider">■</div>
@@ -100,7 +100,7 @@
                   <div class="resume-text">Currently working on accelerator sharing and resource disaggregation, specifically aimed towards machine learning workloads.</div>
                 </li>
               </ul>
-              <div class="experience-skills-text"><strong class="experience-skills-text-bold">Skills: </strong>Go, C++, CUDA, Hardware Performance Counters, eBPF<br>‍</div>
+              <div class="experience-skills-text"><strong class="experience-skills-text-bold">Skills: </strong>Go, C++, CUDA, GPUs, Accelerators, Hardware Performance Counters, eBPF<br>‍</div>
             </div>
           </div>
           <div class="resume-date-item">
@@ -109,7 +109,7 @@
                 <div class="date-item-header-text">Huawei R&amp;D UK</div>
               </div>
               <div class="date-item-location">Edinburgh, Scotland, United Kingdom</div>
-              <div class="date-item-date">Nov 2021 - May 2023 · 1 yr 7 mos</div>
+              <div class="date-item-date date-item-calc">Nov 2021 - May 2023 · 1 yr 7 mos</div>
             </div>
             <div class="date-item-separator-dots">
               <div class="separator-bullet"></div>
@@ -140,7 +140,7 @@
                 <div class="date-item-header-text">IDLab (Ghent University, Imec)</div>
               </div>
               <div class="date-item-location">Ghent Area, Belgium</div>
-              <div class="date-item-date">Aug 2019 - Sep 2019 · 2 mos</div>
+              <div class="date-item-date date-item-calc">Aug 2019 - Sep 2019 · 2 mos</div>
             </div>
             <div class="date-item-separator-solid">
               <div class="separator-bullet"></div>
@@ -161,7 +161,7 @@
                 <div class="date-item-header-text">IDLab (Ghent University, Imec)</div>
               </div>
               <div class="date-item-location">Ghent Area, Belgium</div>
-              <div class="date-item-date">Aug 2018 · 1 mos</div>
+              <div class="date-item-date date-item-calc">Aug 2018 · 1 mos</div>
             </div>
             <div class="date-item-separator-hidden">
               <div class="separator-bullet"></div>
@@ -226,7 +226,7 @@
             <div class="skills-header">Technologies:</div>
             <div class="resume-text">Kubernetes, Prometheus, Container Runtimes, eBPF, Serverless (FaaS)</div>
             <div class="skills-header">Other:</div>
-            <div class="resume-text">Cloud Infrastructure, Distributed Systems, Operating Systems, Heterogeneous Hardware</div>
+            <div class="resume-text">Cloud Infrastructure, Distributed Systems, Operating Systems, Heterogeneous Hardware, Hardware Accelerators, High Performance Computing</div>
           </div>
         </div>
         <div class="skills-note"><em class="italic">Note: this list is non-exhaustive and only includes recently used skills. Generally, I am quick and eager to learn new languages, frameworks and technologies where necessary.</em></div>
@@ -350,7 +350,83 @@
     // Update date every second
     updateDateTime();
     setInterval(updateDateTime, 1000);
+
+    function monthDiff(d1, d2) {
+      var months;
+      months = (d2.getFullYear() - d1.getFullYear()) * 12 + 1;
+      months -= d1.getMonth();
+      months += d2.getMonth();
+      return months <= 0 ? 0 : months;
+    }
+
+    function formatDate(text) {
+      const regexp = /(.*) - (.*) · .*/g;
+      const matches = regexp.exec(text);
+
+      let diff;
+      let from;
+      let to;
+
+      if (matches) {
+        from = matches[1];
+        to = matches[2];
+
+        let fromDate = new Date(Date.parse(from));
+        let toDate;
+        if (to === "Present") {
+          toDate = new(Date);
+        } else {
+          toDate = new Date(Date.parse(to));
+        }
+
+        diff = monthDiff(fromDate, toDate);
+        
+      } else {
+        const singleRegexp = /(.*) · .*/g;
+        const matches2 = singleRegexp.exec(text);
+        from = matches2[1];
+        diff = 1;
+      }
+      
+      const months = diff % 12;
+      const years = Math.floor(diff / 12);
+
+      let result = from 
+      
+      if (to) {
+        result += " - " + to;
+      }
+      result += " · ";
+      if (years == 1) {
+        result += years + " yr ";
+      }
+
+      if (years > 1) {
+        result += years + " yrs ";
+      }
+
+      if (months == 1) {
+        result += months + " mo";
+      }
+
+      if (months > 1) {
+        result += months + " mos";
+      }
+
+      return result;
+    }
     
+    function formatDuration(element) {
+      let text = element.textContent;
+      console.log(text);
+    }
+
+    // Calculate resume date durations
+    var elements = document.getElementsByClassName("date-item-date date-item-calc");
+    for (let el of elements) {
+      //formatDuration(el);
+      el.textContent = formatDate(el.textContent);
+    }
     
   </script>
 </body>
